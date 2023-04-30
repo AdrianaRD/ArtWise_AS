@@ -164,7 +164,6 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Toast.makeText(getContext(), "Recognition failed, check if the microphone is available.", Toast.LENGTH_SHORT).show();
             }
-            //activacionVoz.setImageResource(R.drawable.icons8_microphone_50__3_);
             binding.btnMicro.setImageResource(R.drawable.baseline_mic_22);
         }
 
@@ -210,56 +209,23 @@ public class HomeFragment extends Fragment {
                  ArrayList<String> result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                  if (result != null) {
                      String frase=result.get(0);
-                     scaneo();
+                     frase.toLowerCase();
+                     if(frase.contains("comenzar") || frase.contains("comienza") || frase.contains("comiénzame")){
+                         if(binding.btnComenzar.getText().equals("Comenzar")) {scaneo();}
+                     }else if(frase.contains("terminar") || frase.contains("termina") || frase.contains("termíname")){
+                         if(binding.btnComenzar.getText().equals("Buscando")) {scaneo();}
+                     }else if(frase.contains("repetir")||frase.contains("repite")||frase.contains("repíteme")){
+                         activity.repeOBRA();
+                     }else if(frase.contains("info")){
+                         activity.infoOBRA();
+                     }
+
+
                  }else {
                      Log.e("SpeechRecognizer", "onError: ");
                  }
-
-                 /*if (result != null) {
-                     String frase=result.get(0);
-                     frase.toLowerCase();
-                     if(frase.contains("comenzar") || frase.contains("comienza") || frase.contains("comiénzame")){
-                         if(scanButton.getText().equals("Comenzar")) {scaneo();}
-                     }else if(frase.contains("terminar") || frase.contains("termina") || frase.contains("termíname")){
-                         if(scanButton.getText().equals("Buscando")) {scaneo();}
-                     } else if(frase.contains("repetir")||frase.contains("repite")||frase.contains("repíteme")){
-                         repetrir();
-                     }else if(frase.contains("reporte")||frase.contains("reportar")){
-                         reporte();
-                     }else if(frase.contains("opcional")){
-                         Pattern p = Pattern.compile("\\bactiva\\b");
-                         Matcher m = p.matcher(frase);
-                         if(alertas.getText().equals("Información Opcional")){
-                             if(frase.equals("información opcional") || m.find() || frase.contains("pon") || frase.contains("ponme") && !frase.contains("desactiva")){
-                                 alertas();
-                             }
-                         }else if(alertas.getText().equals("¡Información Opcional!")) {
-                             if( frase.contains("desactiva") || frase.contains("quita") || frase.contains("quítame") && !frase.contains("activa")){
-                                 alertas();
-                             }
-                         }
-
-                     }else if(frase.contains("modo apoyo")){
-                         if(basico.getText().equals("Modo Lazarillo")){
-                             basico();
-                         }else if(frase.contains("desactivar") ||frase.contains("desactiva")){
-                             basico();
-                         }
-
-                     }else if(frase.contains("modo lazarillo")){
-                         if(basico.getText().equals("Modo Apoyo")){
-                             basico();
-                         }
-
-                     } else if(frase.contains("configuracion")||frase.contains("configuraciones")){
-                         optionLayout();
-                     }else if(frase.contains("ayuda")||frase.contains("ayudas")){
-                         ayudar();
-                     }
-                 } */
                  binding.btnMicro.setImageResource(R.drawable.baseline_mic_24);
              }
-
              @Override
              public void onPartialResults(Bundle partialResults) {
                  Log.d("SpeechRecognizer", "onPartialResults");
