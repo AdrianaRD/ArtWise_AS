@@ -225,6 +225,7 @@ public class HomeFragment extends Fragment {
                      Log.e("SpeechRecognizer", "onError: ");
                  }
                  binding.btnMicro.setImageResource(R.drawable.baseline_mic_24);
+                 //qqq
              }
              @Override
              public void onPartialResults(Bundle partialResults) {
