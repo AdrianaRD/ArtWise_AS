@@ -11,30 +11,28 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.artwise_as.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,8 +44,6 @@ import com.example.artwise_as.databinding.ActivityMenu2Binding;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +57,9 @@ public class Menu2Activity extends AppCompatActivity {
     private String text;
     private String titulo;
     private String descripcion;
+
+    private String tituloDB;
+    private String descriptionDB;
     private int conversionRSSI;
     private ArrayList<String> leidos = new ArrayList<String>();
 
@@ -90,7 +89,6 @@ public class Menu2Activity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
 
-    private BroadcastReceiver mBluetoothReceiver;
 
     private BluetoothLeScanner bluetoothLeScanner;
 
@@ -101,8 +99,6 @@ public class Menu2Activity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
-    //instancia fragment
-    private HomeFragment myFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +111,7 @@ public class Menu2Activity extends AppCompatActivity {
         binding.appBarMenu2.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                reporte();
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -135,16 +130,12 @@ public class Menu2Activity extends AppCompatActivity {
         bluetoothConection();
         toSpeecFuntion();
         fireBaseConecction();
+        langaugeDataBase();
 
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu2, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -215,10 +206,10 @@ public class Menu2Activity extends AppCompatActivity {
                 if (status == TextToSpeech.SUCCESS) {
                     int result = tts.setLanguage(Locale.getDefault());
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Toast.makeText(Menu2Activity.this, "Idioma no soportado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Menu2Activity.this, getResources().getString(R.string.soported_laguage), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(Menu2Activity.this, "Error al inicializar TextToSpeech", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Menu2Activity.this, getResources().getString(R.string.error_toexpect), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -229,7 +220,7 @@ public class Menu2Activity extends AppCompatActivity {
         if (titulo != null && titulo !="") {
             tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
         }else{
-            tts.speak("debes comenzar trayecto.", TextToSpeech.QUEUE_ADD, null, null);
+            tts.speak(getResources().getString(R.string.init_ride), TextToSpeech.QUEUE_ADD, null, null);
         }
     }
 
@@ -237,7 +228,7 @@ public class Menu2Activity extends AppCompatActivity {
         if (descripcion != null && descripcion !="") {
             tts.speak(descripcion, TextToSpeech.QUEUE_ADD, null, null);
         }else{
-            tts.speak("debes comenzar trayecto.", TextToSpeech.QUEUE_ADD, null, null);
+            tts.speak(getResources().getString(R.string.init_ride), TextToSpeech.QUEUE_ADD, null, null);
         }
     }
 
@@ -252,7 +243,7 @@ public class Menu2Activity extends AppCompatActivity {
         if (!scanning) {
             // Iniciar el escaneo
             scanning = true;
-            text = "Comenzamos.";
+            text = getResources().getString(R.string.label_start);
             tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
 
             handler.postDelayed(new Runnable() {
@@ -268,7 +259,7 @@ public class Menu2Activity extends AppCompatActivity {
 
     public void stopScanning() {
             if(scanning){
-            text = "Viaje terminado.";
+            text = getResources().getString(R.string.label_finish);
             tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
             scanning = false;
             leidos.clear();
@@ -278,6 +269,63 @@ public class Menu2Activity extends AppCompatActivity {
 
     }}
 
+    public void reporte(){
+        text = getResources().getString(R.string.eviar_reporte);
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"samuelmatas1997@gmail.com"});
+        String infoBeacon=getResources().getString(R.string.label_sin_nave);
+        if (!leidos.isEmpty()){
+            infoBeacon=""+leidos.get(leidos.size()-1);
+        }
+        i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.label_report_error)+infoBeacon);
+        i.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.label_no_funtion));
+        try {
+            startActivity(Intent.createChooser(i, getResources().getString(R.string.label_envi_correo)));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(Menu2Activity.this, getResources().getString(R.string.label_correo_ins), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void changeSpeedOne() {
+        float speed = 1.5f;
+        tts.setSpeechRate(speed);
+        text = getResources().getString(R.string.label_velo15);
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+    }
+    public void changeSpeedTwo() {
+        float speed = 2.0f;
+        tts.setSpeechRate(speed);
+        text = getResources().getString(R.string.label_velo2);
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+    }
+    public void changeSpeedThree() {
+        float speed = 1.0f;
+        tts.setSpeechRate(speed);
+        text = getResources().getString(R.string.label_velonormal);
+        tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+    }
+    public void langaugeDataBase(){
+        //saber idioma
+        Configuration config = getResources().getConfiguration();
+
+        // Obtener el idioma actual del dispositivo
+        String deviceLanguage = config.locale.getLanguage();
+        if (deviceLanguage.equals("en")) {
+             tituloDB="titulo_en";
+            descriptionDB="descripcion_en";
+        } else {
+            tituloDB="titulo";
+            descriptionDB="descripcion";
+        }
+    }
+    public void vibration(){
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+    }
 
     //*******************************clase para leer beacons***********
 
@@ -314,8 +362,8 @@ public class Menu2Activity extends AppCompatActivity {
                                         // Obtener los valores de los campos "titulo" y "descripcion"
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            titulo = document.getString("titulo");
-                                            descripcion = document.getString("descripcion");
+                                            titulo = document.getString(tituloDB);
+                                            descripcion = document.getString(descriptionDB);
                                             conversionRSSI=Integer.parseInt(document.getString("rssi"));
 
                                             if(distancia>=conversionRSSI && !leidos.contains(cod)){

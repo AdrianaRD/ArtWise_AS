@@ -13,6 +13,7 @@
     <string name="menu_slideshow">Sobre Nosotros</string>
     <string name="menu_preguntas">Preguntas</string>
 
+
     <string name="soported_laguage">Idioma no Soportado</string>
     <string name="error_toexpect">Error al inicializar toSpeech</string>
     <string name="init_ride">debes comenzar trayecto.</string>
@@ -71,5 +72,4 @@
     <string name="label_voz_velocidad">velocidad</string>
     <string name="label_infomore">+Informacion</string>
     <string name="label_repetir">Repetir</string>
-
 </resources>

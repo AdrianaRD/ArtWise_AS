@@ -1,17 +1,13 @@
 package com.example.artwise_as.ui.home;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -19,26 +15,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.artwise_as.Menu2Activity;
 import com.example.artwise_as.R;
 import com.example.artwise_as.databinding.FragmentHomeBinding;
-import com.google.android.material.navigation.NavigationView;
-
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+
 
 public class HomeFragment extends Fragment {
 
@@ -117,23 +105,23 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) { // Define el comportamiento al hacer clic
                 // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                Toast.makeText(getContext(), "¡Haz hecho clic en el botón velocidad!", Toast.LENGTH_SHORT).show();
+                changeSpeed();
             }
         });
 
     }//fin onClick
 
     public void changeText(){
-        if(binding.btnComenzar.getText().equals("Comenzar")){
-            binding.btnComenzar.setText("Buscando");
+        if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_comenzar))){
+            binding.btnComenzar.setText(getResources().getString(R.string.label_buscando));
         }else{
-            binding.btnComenzar.setText("Comenzar");
+            binding.btnComenzar.setText(getResources().getString(R.string.label_comenzar));
 
         }
     }
     public void scaneo(){
         changeText();
-        if(binding.btnComenzar.getText().equals("Buscando")){
+        if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_buscando))){
             activity.startScanning();
         }else {
             activity.stopScanning();
@@ -141,15 +129,31 @@ public class HomeFragment extends Fragment {
 
         }
 
-    public void Onmicro(){
+    public void changeSpeed() {
+        String buttonText = binding.btnVelocidad.getText().toString();
+        if(buttonText.equals("x1")){
+            binding.btnVelocidad.setText("x1.5");
+            activity.changeSpeedOne();
+        }else if(buttonText.equals("x1.5")){
+            binding.btnVelocidad.setText("x2");
+            activity.changeSpeedTwo();
+        }else if(buttonText.equals("x2")){
+            binding.btnVelocidad.setText("x1");
+            activity.changeSpeedThree();
 
+        }
+
+    }
+
+    public void Onmicro(){
+        activity.vibration();
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.RECORD_AUDIO)) {
-                Toast.makeText(getContext(), "La aplicación requiere permiso de grabación de audio para funcionar", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.audio_perimmision), Toast.LENGTH_LONG).show();
             }
 
             ActivityCompat.requestPermissions(getActivity(),
@@ -162,9 +166,9 @@ public class HomeFragment extends Fragment {
             try {
                 speechRecognizer.startListening(intent);
             } catch (Exception e) {
-                Toast.makeText(getContext(), "Recognition failed, check if the microphone is available.", Toast.LENGTH_SHORT).show();
+                Log.d("SpeechRecognizer", "Recognition failed, check if the microphone is available.");
             }
-            binding.btnMicro.setImageResource(R.drawable.baseline_mic_22);
+            binding.btnMicro.setImageResource(R.drawable.baseline_mic_black);
         }
 
     }
@@ -199,8 +203,6 @@ public class HomeFragment extends Fragment {
              @Override
              public void onError(int error) {
                  Log.e("SpeechRecognizer", "onError: " + error);
-                 //txt.setText("Error code: " + error);
-                 //activacionVoz.setImageResource(R.drawable.icons8_microphone_50__1_);
                  binding.btnMicro.setImageResource(R.drawable.baseline_mic_24);
              }
 
@@ -210,14 +212,16 @@ public class HomeFragment extends Fragment {
                  if (result != null) {
                      String frase=result.get(0);
                      frase.toLowerCase();
-                     if(frase.contains("comenzar") || frase.contains("comienza") || frase.contains("comiénzame")){
-                         if(binding.btnComenzar.getText().equals("Comenzar")) {scaneo();}
-                     }else if(frase.contains("terminar") || frase.contains("termina") || frase.contains("termíname")){
-                         if(binding.btnComenzar.getText().equals("Buscando")) {scaneo();}
-                     }else if(frase.contains("repetir")||frase.contains("repite")||frase.contains("repíteme")){
+                     if(frase.contains(getResources().getString(R.string.label_voz_comenzar)) || frase.contains(getResources().getString(R.string.label_voz_comenzar1)) || frase.contains(getResources().getString(R.string.label_voz_comenzar2))){
+                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_comenzar))) {scaneo();}
+                     }else if(frase.contains(getResources().getString(R.string.label_voz_termina)) || frase.contains(getResources().getString(R.string.label_voz_termina1)) || frase.contains(getResources().getString(R.string.label_voz_termina2))){
+                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_buscando))) {scaneo();}
+                     }else if(frase.contains(getResources().getString(R.string.label_voz_repe))||frase.contains(getResources().getString(R.string.label_voz_repe1))||frase.contains(getResources().getString(R.string.label_voz_repe2))){
                          activity.repeOBRA();
-                     }else if(frase.contains("info")){
+                     }else if(frase.contains(getResources().getString(R.string.label_voz_info))){
                          activity.infoOBRA();
+                     }else if(frase.contains(getResources().getString(R.string.label_voz_velocidad))){
+                         changeSpeed();
                      }
 
 
@@ -225,7 +229,7 @@ public class HomeFragment extends Fragment {
                      Log.e("SpeechRecognizer", "onError: ");
                  }
                  binding.btnMicro.setImageResource(R.drawable.baseline_mic_24);
-                 //qqq
+
              }
              @Override
              public void onPartialResults(Bundle partialResults) {

@@ -46,21 +46,13 @@ public class GalleryFragment extends Fragment {
     private void initData() {
 
         pf_preguntasList = new ArrayList<>();
-        pf_preguntasList.add(new PF_Preguntas("¿Necesito tener una conexión a Internet para usar la aplicación en el museo?",
-                "Si, es necesario para el correcto funcionamiento de la apliación."));
-        pf_preguntasList.add(new PF_Preguntas("¿Cómo puedo saber qué información se proporciona en la aplicación sobre cada obra de arte?",
-                "La aplicación tiene una configuración estándar que muestra información básica sobre una obra cuando se detecta un beacon. Al hacer clic en el botón '+ Información', se puede obtener información más detallada y curiosa sobre la obra."));
-        pf_preguntasList.add(new PF_Preguntas("¿La aplicación está disponible en varios idiomas?",
-                "Actualmente solo está disponible en español, pero en futuras actualizaciones estará disponible en otros idiomas como inglés, francés, portugués y alemán."));
-        pf_preguntasList.add(new PF_Preguntas("¿Cómo puedo reportar problemas técnicos o errores en la aplicación? ",
-                "En la pantalla de incio hay un boton en la esquina inferior derecha con forma de sobre'" +
-                        ", este permite a los usuarios reportar errores encontrados en la aplicación mediante correo electrónico. "));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_1), getResources().getString(R.string.answer_1)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_2), getResources().getString(R.string.answer_2)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_3), getResources().getString(R.string.answer_3)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_4), getResources().getString(R.string.answer_4)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_5), getResources().getString(R.string.answer_5)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_6), getResources().getString(R.string.answer_6)));
+        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_7), getResources().getString(R.string.answer_7)));
 
-        pf_preguntasList.add(new PF_Preguntas("¿Cómo puedo encontrar los beacons en el museo para poder usar la aplicación?",
-                "Los beacons están ubicados estratégicamente junto a cada obra, lo que permite que la información sobre las obras se lea a medida que se visite el museo."));
-        pf_preguntasList.add(new PF_Preguntas("¿La aplicación proporciona información sobre la historia y la cultura detrás de las obras de arte?",
-                "Si, al hacer clic en el botón '+ Información', se mostrará información más detallada sobre cada obra. "));
-        pf_preguntasList.add(new PF_Preguntas("¿La aplicación requiere que active la ubicación en mi dispositivo móvil para funcionar?  ",
-                "Si, para el correcto funcionamiento de la aplicación es imprescindible tanto la conectividad de la ubicación como la del bluetooth."));
     }
 }

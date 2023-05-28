@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ArtWise_AS</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">FAQs</string>
+    <string name="menu_slideshow">About Us</string>
+    <string name="menu_preguntas">Questions</string>
+
+
+    <string name="soported_laguage">Unsupported Language</string>
+    <string name="error_toexpect">Error initializing toSpeech</string>
+    <string name="init_ride">You must start the journey.</string>
+    <string name="label_start">Let begin.</string>
+    <string name="label_finish">Journey completed</string>
+
+    <string name="question_1">Do I need an internet connection to use the app in the museum?</string>
+    <string name="answer_1">Yes, it is necessary for the proper functioning of the application.</string>
+
+    <string name="question_2">How can I know what information is provided in the app about each artwork?</string>
+    <string name="answer_2">The app has a standard configuration that displays basic information about an artwork when a beacon is detected. By clicking on the + Information button, you can obtain more detailed and interesting information about the artwork.</string>
+
+    <string name="question_3">Is the app available in multiple languages?</string>
+    <string name="answer_3">Currently, it is only available in Spanish and English, but future updates will include other languages such as French, Portuguese, and German.</string>
+
+    <string name="question_4">How can I report technical issues or errors in the app?</string>
+    <string name="answer_4">On the home screen, there is a button in the bottom right corner in the shape of an envelope. This allows users to report any errors found in the app via email.</string>
+
+    <string name="question_5">How can I find the beacons in the museum to use the app?</string>
+    <string name="answer_5">The beacons are strategically located next to each artwork, allowing the information about the artworks to be read as you visit the museum.</string>
+
+    <string name="question_6">Does the app provide information about the history and culture behind the artworks?</string>
+    <string name="answer_6">Yes, by clicking on the + Information button, you will be shown more detailed information about each artwork.</string>
+
+    <string name="question_7">Does the app require me to enable location on my mobile device to function?</string>
+    <string name="answer_7">Yes, for the proper functioning of the app, both location connectivity and Bluetooth are essential.</string>
+    <string name="label_comenzar">Start</string>
+    <string name="label_buscando">Searching</string>
+    <string name="audio_perimmision">The app requires audio recording permission to function</string>
+
+    <string name="eviar_reporte">Send Report.</string>
+    <string name="label_sin_nave">No Navigation</string>
+    <string name="label_report_error">Report Error</string>
+    <string name="label_no_funtion">The app is not functioning properly.</string>
+    <string name="label_envi_correo">Send Email...</string>
+    <string name="label_correo_ins">No email client installed.</string>
+
+
+    <string name="label_voz_comenzar">start</string>
+    <string name="label_voz_comenzar1">begin</string>
+    <string name="label_voz_comenzar2">start</string>
+
+    <string name="label_voz_termina">finish</string>
+    <string name="label_voz_termina1">end</string>
+    <string name="label_voz_termina2">finish</string>
+
+    <string name="label_voz_repe">repeat</string>
+    <string name="label_voz_repe1">repeat</string>
+    <string name="label_voz_repe2">repeat</string>
+
+    <string name="label_voz_info">info</string>
+
+    <string name="label_velo15">Speed 1.5x</string>
+    <string name="label_velo2">Speed 2x</string>
+    <string name="label_velonormal">Normal Speed</string>
+    <string name="label_voz_velocidad">speed</string>
+    <string name="label_infomore">+More Info</string>
+    <string name="label_repetir">Repeat</string>
+
+
+
+</resources>
