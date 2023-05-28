@@ -72,4 +72,11 @@
     <string name="label_voz_velocidad">velocidad</string>
     <string name="label_infomore">+Informacion</string>
     <string name="label_repetir">Repetir</string>
+    <string name="label_titlovisita">Tu Visita con ArtWise</string>
+    <string name="label_text1">Es una guía de audio que ofrece una experiencia interactiva y enriquecedora al visitar un museo.</string>
+    <string name="label_text2">Actualmente nos encontramos en los principales museos a nivel nacional, donde puedes usar la app para mejorar la experiencia en tu visita.</string>
+    <string name="label_text3">Realizamos un estudio del espacio de los museos y ubicamos los beacons estrategicamente. Los beacons transmiten una señal que se transforma en audioguia.</string>
+    <string name="label_text4">Al pulsar comenzar el usuario se acerca a la obra en exposición y la app logra realizar la audioguia y transmitir la información.</string>
+    <string name="label_titu">Donde nos Ubicamos</string>
+    <string name="label_titu2">Como Funciona</string>
 </resources>

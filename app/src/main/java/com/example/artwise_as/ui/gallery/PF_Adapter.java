@@ -1,4 +1,4 @@
-package com.example.artwise_as;
+package com.example.artwise_as.ui.gallery;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.artwise_as.R;
 
 import java.util.List;
 

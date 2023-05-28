@@ -73,6 +73,13 @@
     <string name="label_infomore">+More Info</string>
     <string name="label_repetir">Repeat</string>
 
+    <string name="label_titlovisita">Your Visit with ArtWise</string>
+    <string name="label_text1">It is an audio guide that offers an interactive and enriching experience when visiting a museum.</string>
+    <string name="label_text2">We are currently present in the main museums nationwide, where you can use the app to enhance your visit.</string>
+    <string name="label_text3">We conduct a study of the museum space and strategically place beacons. The beacons transmit a signal that is transformed into an audio guide.</string>
+    <string name="label_text4">When the user presses start, they approach the exhibited artwork, and the app successfully provides the audio guide and transmits the information.</string>
+    <string name="label_titu">Where We Are Located</string>
+    <string name="label_titu2">How It Works</string>
 
 
 </resources>

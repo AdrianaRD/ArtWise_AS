@@ -1,4 +1,4 @@
-package com.example.artwise_as;
+package com.example.artwise_as.ui.gallery;
 
 public class PF_Preguntas {
     private String pregunta,respuesta;
