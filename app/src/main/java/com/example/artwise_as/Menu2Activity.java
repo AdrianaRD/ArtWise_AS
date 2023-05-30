@@ -135,8 +135,6 @@ public class Menu2Activity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu2);
@@ -144,7 +142,7 @@ public class Menu2Activity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void checkPermission(){
+    public void checkPermission() {
         //activacion de ubicacion
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -172,7 +170,8 @@ public class Menu2Activity extends AppCompatActivity {
             startActivity(enableBtIntent);
         }
     }
-    private void checkPermission2(){
+
+    private void checkPermission2() {
         int permission1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permission2 = ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN);
         if (permission1 != PackageManager.PERMISSION_GRANTED) {
@@ -182,7 +181,7 @@ public class Menu2Activity extends AppCompatActivity {
                     PERMISSIONS_STORAGE,
                     1
             );
-        } else if (permission2 != PackageManager.PERMISSION_GRANTED){
+        } else if (permission2 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
                     PERMISSIONS_LOCATION,
@@ -191,7 +190,7 @@ public class Menu2Activity extends AppCompatActivity {
         }
     }
 
-    public void bluetoothConection(){
+    public void bluetoothConection() {
         //instancia de los bluetooth
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
@@ -199,7 +198,7 @@ public class Menu2Activity extends AppCompatActivity {
         handler = new Handler();
     }
 
-    public void toSpeecFuntion(){
+    public void toSpeecFuntion() {
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -216,25 +215,25 @@ public class Menu2Activity extends AppCompatActivity {
     }
 
     //**************
-    public void repeOBRA(){
-        if (titulo != null && titulo !="") {
+    public void repeOBRA() {
+        if (titulo != null && titulo != "") {
             tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
-        }else{
+        } else {
             tts.speak(getResources().getString(R.string.init_ride), TextToSpeech.QUEUE_ADD, null, null);
         }
     }
 
-    public void infoOBRA(){
-        if (descripcion != null && descripcion !="") {
+    public void infoOBRA() {
+        if (descripcion != null && descripcion != "") {
             tts.speak(descripcion, TextToSpeech.QUEUE_ADD, null, null);
-        }else{
+        } else {
             tts.speak(getResources().getString(R.string.init_ride), TextToSpeech.QUEUE_ADD, null, null);
         }
     }
 
     //*************************
 
-    public void fireBaseConecction(){
+    public void fireBaseConecction() {
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
     }
@@ -252,34 +251,41 @@ public class Menu2Activity extends AppCompatActivity {
                     //stopScanning();
                 }
             }, 0); // Escanear durante 5 segundo
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             bluetoothLeScanner.startScan(new BeaconScanCallback());
         }
-        }
+    }
 
 
     public void stopScanning() {
-            if(scanning){
+        if (scanning) {
             text = getResources().getString(R.string.label_finish);
             tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
             scanning = false;
             leidos.clear();
-            titulo="";
-            descripcion="";
+            titulo = "";
+            descripcion = "";
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             bluetoothLeScanner.stopScan(new BeaconScanCallback());
 
-    }}
+        }
+    }
 
-    public void reporte(){
+    public void reporte() {
         text = getResources().getString(R.string.eviar_reporte);
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"samuelmatas1997@gmail.com"});
-        String infoBeacon=getResources().getString(R.string.label_sin_nave);
-        if (!leidos.isEmpty()){
-            infoBeacon=""+leidos.get(leidos.size()-1);
+        String infoBeacon = getResources().getString(R.string.label_sin_nave);
+        if (!leidos.isEmpty()) {
+            infoBeacon = "" + leidos.get(leidos.size() - 1);
         }
-        i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.label_report_error)+infoBeacon);
+        i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.label_report_error) + infoBeacon);
         i.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.label_no_funtion));
         try {
             startActivity(Intent.createChooser(i, getResources().getString(R.string.label_envi_correo)));
@@ -294,33 +300,37 @@ public class Menu2Activity extends AppCompatActivity {
         text = getResources().getString(R.string.label_velo15);
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
     }
+
     public void changeSpeedTwo() {
         float speed = 2.0f;
         tts.setSpeechRate(speed);
         text = getResources().getString(R.string.label_velo2);
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
     }
+
     public void changeSpeedThree() {
         float speed = 1.0f;
         tts.setSpeechRate(speed);
         text = getResources().getString(R.string.label_velonormal);
         tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
     }
-    public void langaugeDataBase(){
+
+    public void langaugeDataBase() {
         //saber idioma
         Configuration config = getResources().getConfiguration();
 
         // Obtener el idioma actual del dispositivo
         String deviceLanguage = config.locale.getLanguage();
         if (deviceLanguage.equals("en")) {
-             tituloDB="titulo_en";
-            descriptionDB="descripcion_en";
+            tituloDB = "titulo_en";
+            descriptionDB = "descripcion_en";
         } else {
-            tituloDB="titulo";
-            descriptionDB="descripcion";
+            tituloDB = "titulo";
+            descriptionDB = "descripcion";
         }
     }
-    public void vibration(){
+
+    public void vibration() {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -343,7 +353,10 @@ public class Menu2Activity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             BluetoothDevice device = result.getDevice();
             ScanRecord scanRecord = result.getScanRecord();
-            String nombre=""+result.getDevice().getName();
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            String nombre = "" + result.getDevice().getName();
             String cod=result.getDevice().getAddress();
             int distancia =result.getRssi();
 
