@@ -1,7 +1,10 @@
 package com.example.artwise_as.ui.gallery;
 
+import androidx.annotation.NonNull;
+
 public class PF_Preguntas {
-    private String pregunta,respuesta;
+    private final String pregunta;
+    private final String respuesta;
     private boolean expandable;
 
     public boolean isExpandable() {
@@ -21,19 +24,11 @@ public class PF_Preguntas {
     public String getPregunta() {
         return pregunta;
     }
-
-    public void setPregunta(String pregunta) {
-        this.pregunta = pregunta;
-    }
-
     public String getRespuesta() {
         return respuesta;
     }
 
-    public void setRespuesta(String respuesta) {
-        this.respuesta = respuesta;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "PF_Preguntas{" +

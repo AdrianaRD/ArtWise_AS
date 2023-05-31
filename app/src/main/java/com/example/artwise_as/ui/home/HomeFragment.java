@@ -1,13 +1,11 @@
 package com.example.artwise_as.ui.home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -20,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import com.example.artwise_as.Menu2Activity;
 import com.example.artwise_as.R;
 import com.example.artwise_as.databinding.FragmentHomeBinding;
@@ -39,8 +36,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -51,12 +46,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof Menu2Activity) {
             activity = (Menu2Activity) context;
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(context
                     + " must implement Menu2Activity");
         }
     }
@@ -73,41 +68,16 @@ public class HomeFragment extends Fragment {
     }
 
     public void onClick(){
-        binding.btnComenzar.setOnClickListener(new View.OnClickListener() { // Define el OnClickListener
-            @Override
-            public void onClick(View v) { // Define el comportamiento al hacer clic
-                // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                scaneo();
-            }
-        });
-        binding.btnRepe.setOnClickListener(new View.OnClickListener() { // Define el OnClickListener
-            @Override
-            public void onClick(View v) { // Define el comportamiento al hacer clic
-                // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                activity.repeOBRA();
-            }
-        });
-        binding.btnInformacion.setOnClickListener(new View.OnClickListener() { // Define el OnClickListener
-            @Override
-            public void onClick(View v) { // Define el comportamiento al hacer clic
-                // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                activity.infoOBRA();
-            }
-        });
-        binding.btnMicro.setOnClickListener(new View.OnClickListener() { // Define el OnClickListener
-            @Override
-            public void onClick(View v) { // Define el comportamiento al hacer clic
-                // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                Onmicro();
-            }
-        });
-        binding.btnVelocidad.setOnClickListener(new View.OnClickListener() { // Define el OnClickListener
-            @Override
-            public void onClick(View v) { // Define el comportamiento al hacer clic
-                // Aquí es donde pondrías el código que quieres ejecutar cuando se hace clic en el botón
-                changeSpeed();
-            }
-        });
+        // Define el OnClickListener
+        binding.btnComenzar.setOnClickListener(v -> scanned());
+        // Define el OnClickListener
+        binding.btnRepe.setOnClickListener(v -> activity.repeOBRA());
+        // Define el OnClickListener
+        binding.btnInformacion.setOnClickListener(v -> activity.infoOBRA());
+        // Define el OnClickListener
+        binding.btnMicro.setOnClickListener(v -> Omicron());
+        // Define el OnClickListener
+        binding.btnVelocidad.setOnClickListener(v -> changeSpeed());
 
     }//fin onClick
 
@@ -119,7 +89,7 @@ public class HomeFragment extends Fragment {
 
         }
     }
-    public void scaneo(){
+    public void scanned(){
         changeText();
         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_buscando))){
             activity.startScanning();
@@ -129,34 +99,39 @@ public class HomeFragment extends Fragment {
 
         }
 
+    @SuppressLint("SetTextI18n")
     public void changeSpeed() {
         String buttonText = binding.btnVelocidad.getText().toString();
-        if(buttonText.equals("x1")){
-            binding.btnVelocidad.setText("x1.5");
-            activity.changeSpeedOne();
-        }else if(buttonText.equals("x1.5")){
-            binding.btnVelocidad.setText("x2");
-            activity.changeSpeedTwo();
-        }else if(buttonText.equals("x2")){
-            binding.btnVelocidad.setText("x1");
-            activity.changeSpeedThree();
+        switch (buttonText) {
+            case "x1":
+                binding.btnVelocidad.setText("x1.5");
+                activity.changeSpeedOne();
+                break;
+            case "x1.5":
+                binding.btnVelocidad.setText("x2");
+                activity.changeSpeedTwo();
+                break;
+            case "x2":
+                binding.btnVelocidad.setText("x1");
+                activity.changeSpeedThree();
 
+                break;
         }
 
     }
 
-    public void Onmicro(){
+    public void Omicron(){
         activity.vibration();
-        if (ContextCompat.checkSelfPermission(getContext(),
+        if (ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
                     Manifest.permission.RECORD_AUDIO)) {
                 Toast.makeText(getContext(), getResources().getString(R.string.audio_perimmision), Toast.LENGTH_LONG).show();
             }
 
-            ActivityCompat.requestPermissions(getActivity(),
+            ActivityCompat.requestPermissions(requireActivity(),
                     new String[]{Manifest.permission.RECORD_AUDIO},
                     REQUEST_AUDIO_PERMISSION);
         }else{
@@ -186,7 +161,7 @@ public class HomeFragment extends Fragment {
              }
 
              @Override
-             public void onRmsChanged(float rmsdB) {
+             public void onRmsChanged(float msdB) {
                  Log.d("SpeechRecognizer", "onRmsChanged");
              }
 
@@ -210,17 +185,18 @@ public class HomeFragment extends Fragment {
              public void onResults(Bundle results) {
                  ArrayList<String> result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                  if (result != null) {
-                     String frase=result.get(0);
-                     frase.toLowerCase();
-                     if(frase.contains(getResources().getString(R.string.label_voz_comenzar)) || frase.contains(getResources().getString(R.string.label_voz_comenzar1)) || frase.contains(getResources().getString(R.string.label_voz_comenzar2))){
-                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_comenzar))) {scaneo();}
-                     }else if(frase.contains(getResources().getString(R.string.label_voz_termina)) || frase.contains(getResources().getString(R.string.label_voz_termina1)) || frase.contains(getResources().getString(R.string.label_voz_termina2))){
-                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_buscando))) {scaneo();}
-                     }else if(frase.contains(getResources().getString(R.string.label_voz_repe))||frase.contains(getResources().getString(R.string.label_voz_repe1))||frase.contains(getResources().getString(R.string.label_voz_repe2))){
+                     String phrase=result.get(0);
+                     if(phrase.contains(getResources().getString(R.string.label_voz_comenzar)) || phrase.contains(getResources().getString(R.string.label_voz_comenzar1)) || phrase.contains(getResources().getString(R.string.label_voz_comenzar2))){
+                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_comenzar))) {
+                             scanned();}
+                     }else if(phrase.contains(getResources().getString(R.string.label_voz_termina)) || phrase.contains(getResources().getString(R.string.label_voz_termina1)) || phrase.contains(getResources().getString(R.string.label_voz_termina2))){
+                         if(binding.btnComenzar.getText().equals(getResources().getString(R.string.label_buscando))) {
+                             scanned();}
+                     }else if(phrase.contains(getResources().getString(R.string.label_voz_repe))||phrase.contains(getResources().getString(R.string.label_voz_repe1))||phrase.contains(getResources().getString(R.string.label_voz_repe2))){
                          activity.repeOBRA();
-                     }else if(frase.contains(getResources().getString(R.string.label_voz_info))){
+                     }else if(phrase.contains(getResources().getString(R.string.label_voz_info))){
                          activity.infoOBRA();
-                     }else if(frase.contains(getResources().getString(R.string.label_voz_velocidad))){
+                     }else if(phrase.contains(getResources().getString(R.string.label_voz_velocidad))){
                          changeSpeed();
                      }
 

@@ -16,7 +16,7 @@ import java.util.List;
 public class GalleryFragment extends Fragment {
 
     RecyclerView recyclerView;
-    List<PF_Preguntas> pf_preguntasList;
+    List<PF_Preguntas> pf_questionList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,21 +32,21 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-        PF_Adapter pf_adapter = new PF_Adapter(pf_preguntasList);
+        PF_Adapter pf_adapter = new PF_Adapter(pf_questionList);
         recyclerView.setAdapter(pf_adapter);
         recyclerView.setHasFixedSize(true);
     }
 
     private void initData() {
 
-        pf_preguntasList = new ArrayList<>();
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_1), getResources().getString(R.string.answer_1)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_2), getResources().getString(R.string.answer_2)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_3), getResources().getString(R.string.answer_3)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_4), getResources().getString(R.string.answer_4)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_5), getResources().getString(R.string.answer_5)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_6), getResources().getString(R.string.answer_6)));
-        pf_preguntasList.add(new PF_Preguntas(getResources().getString(R.string.question_7), getResources().getString(R.string.answer_7)));
+        pf_questionList = new ArrayList<>();
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_1), getResources().getString(R.string.answer_1)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_2), getResources().getString(R.string.answer_2)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_3), getResources().getString(R.string.answer_3)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_4), getResources().getString(R.string.answer_4)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_5), getResources().getString(R.string.answer_5)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_6), getResources().getString(R.string.answer_6)));
+        pf_questionList.add(new PF_Preguntas(getResources().getString(R.string.question_7), getResources().getString(R.string.answer_7)));
 
     }
 }

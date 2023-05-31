@@ -108,12 +108,7 @@ public class Menu2Activity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMenu2.toolbar);
-        binding.appBarMenu2.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reporte();
-            }
-        });
+        binding.appBarMenu2.fab.setOnClickListener(view -> reporte());
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -257,8 +252,6 @@ public class Menu2Activity extends AppCompatActivity {
             bluetoothLeScanner.startScan(new BeaconScanCallback());
         }
     }
-
-
     public void stopScanning() {
         if (scanning) {
             text = getResources().getString(R.string.label_finish);
@@ -340,12 +333,6 @@ public class Menu2Activity extends AppCompatActivity {
     //*******************************clase para leer beacons***********
 
     private class BeaconScanCallback extends ScanCallback {
-        private List<ScanFilter> filters;
-
-        public BeaconScanCallback(List<ScanFilter> filters) {
-            this.filters = filters;
-        }
-
         public BeaconScanCallback() {
         }
 
