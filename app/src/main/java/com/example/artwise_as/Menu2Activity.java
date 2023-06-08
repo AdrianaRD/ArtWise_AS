@@ -4,11 +4,9 @@ import static android.content.ContentValues.TAG;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +22,7 @@ import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -37,12 +30,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.artwise_as.databinding.ActivityMenu2Binding;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -237,11 +228,8 @@ public class Menu2Activity extends AppCompatActivity {
             text = getResources().getString(R.string.label_start);
             tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //stopScanning();
-                }
+            handler.postDelayed(() -> {
+                //stopScanning();
             }, 0); // Escanear durante 5 segundo
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             }
@@ -333,10 +321,7 @@ public class Menu2Activity extends AppCompatActivity {
 
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            BluetoothDevice device = result.getDevice();
-            ScanRecord scanRecord = result.getScanRecord();
             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {}
-            String nombre = "" + result.getDevice().getName();
             String cod=result.getDevice().getAddress();
             int distancia =result.getRssi();
 
@@ -348,29 +333,26 @@ public class Menu2Activity extends AppCompatActivity {
                     db.collection("BEACONS")
                             .document(cod)
                             .get()
-                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        // Obtener los valores de los campos "titulo" y "descripcion"
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            conversionRSSI=Integer.parseInt(document.getString("rssi"));
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // Obtener los valores de los campos "titulo" y "descripcion"
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        conversionRSSI=Integer.parseInt(document.getString("rssi"));
 
-                                            if(distancia>=conversionRSSI && !leidos.contains(cod)){
-                                                titulo = document.getString(tituloDB);
-                                                leidos.add(cod);
-                                                tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
-                                                descripcion = document.getString(descriptionDB);
+                                        if(distancia>=conversionRSSI && !leidos.contains(cod)){
+                                            titulo = document.getString(tituloDB);
+                                            leidos.add(cod);
+                                            tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
+                                            descripcion = document.getString(descriptionDB);
 
-                                            }
-
-                                        } else {
-                                            Log.d(TAG, "El documento no existe");
                                         }
+
                                     } else {
-                                        Log.d(TAG, "Error al obtener los datos del documento", task.getException());
+                                        Log.d(TAG, "El documento no existe");
                                     }
+                                } else {
+                                    Log.d(TAG, "Error al obtener los datos del documento", task.getException());
                                 }
                             });
                 }}
