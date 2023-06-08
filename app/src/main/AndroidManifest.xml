@@ -40,7 +40,8 @@
             android:name=".Menu2Activity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ArtWise_AS.NoActionBar">
+            android:theme="@style/Theme.ArtWise_AS.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -247,7 +247,6 @@ public class Menu2Activity extends AppCompatActivity {
                 }
             }, 0); // Escanear durante 5 segundo
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                return;
             }
             bluetoothLeScanner.startScan(new BeaconScanCallback());
         }
@@ -261,7 +260,6 @@ public class Menu2Activity extends AppCompatActivity {
             titulo = "";
             descripcion = "";
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                return;
             }
             bluetoothLeScanner.stopScan(new BeaconScanCallback());
 
@@ -340,9 +338,7 @@ public class Menu2Activity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             BluetoothDevice device = result.getDevice();
             ScanRecord scanRecord = result.getScanRecord();
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {}
             String nombre = "" + result.getDevice().getName();
             String cod=result.getDevice().getAddress();
             int distancia =result.getRssi();
@@ -362,13 +358,13 @@ public class Menu2Activity extends AppCompatActivity {
                                         // Obtener los valores de los campos "titulo" y "descripcion"
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            titulo = document.getString(tituloDB);
-                                            descripcion = document.getString(descriptionDB);
                                             conversionRSSI=Integer.parseInt(document.getString("rssi"));
 
                                             if(distancia>=conversionRSSI && !leidos.contains(cod)){
+                                                titulo = document.getString(tituloDB);
                                                 leidos.add(cod);
                                                 tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
+                                                descripcion = document.getString(descriptionDB);
 
                                             }
 
