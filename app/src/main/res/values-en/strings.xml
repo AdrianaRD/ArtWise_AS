@@ -80,6 +80,7 @@
     <string name="label_text4">When the user presses start, they approach the exhibited artwork, and the app successfully provides the audio guide and transmits the information.</string>
     <string name="label_titu">Where We Are Located</string>
     <string name="label_titu2">How It Works</string>
+    <string name="label_voz_reporte">report</string>
 
 
 </resources>

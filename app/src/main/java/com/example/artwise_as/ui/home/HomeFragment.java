@@ -198,6 +198,8 @@ public class HomeFragment extends Fragment {
                          activity.infoOBRA();
                      }else if(phrase.contains(getResources().getString(R.string.label_voz_velocidad))){
                          changeSpeed();
+                     }else if (phrase.contains(getResources().getString(R.string.label_voz_reporte))){
+                         activity.reporte();
                      }
 
 

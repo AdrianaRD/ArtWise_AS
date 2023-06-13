@@ -343,6 +343,9 @@ public class Menu2Activity extends AppCompatActivity {
                                         if(distancia>=conversionRSSI && !leidos.contains(cod)){
                                             titulo = document.getString(tituloDB);
                                             leidos.add(cod);
+                                            if(leidos.size()==2){
+                                                leidos.remove(0);
+                                            }
                                             tts.speak(titulo, TextToSpeech.QUEUE_ADD, null, null);
                                             descripcion = document.getString(descriptionDB);
 

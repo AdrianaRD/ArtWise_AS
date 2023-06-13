@@ -79,4 +79,5 @@
     <string name="label_text4">Al pulsar comenzar el usuario se acerca a la obra en exposición y la app logra realizar la audioguia y transmitir la información.</string>
     <string name="label_titu">Donde nos Ubicamos</string>
     <string name="label_titu2">Como Funciona</string>
+    <string name="label_voz_reporte">reporte</string>
 </resources>
